@@ -70,11 +70,12 @@ public class EventCollector implements Listener {
 			e.setCancelled(true);
 		}
 	}
-
+/*
 	@EventHandler
 	public void totem(EntityResurrectEvent e) {
 		e.setCancelled(true);
 	}
+	*/
 	@EventHandler
 	public void onPressSpell(PlayerInteractEvent e) {
 		Player p = e.getPlayer();

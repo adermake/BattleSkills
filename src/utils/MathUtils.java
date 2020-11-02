@@ -8,5 +8,5 @@ public class MathUtils {
 		int randomNum = ThreadLocalRandom.current().nextInt(min, max + 1);
 		return randomNum;
 	}
-	
+	//S
 }

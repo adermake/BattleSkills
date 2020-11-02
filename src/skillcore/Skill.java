@@ -43,6 +43,7 @@ public abstract class Skill {
 	
 	public void activate(Player p) {
 		p.sendMessage("§eGained Skill: §7" +name);
+		onSkillStart();
 		user = p;
 		addSkill(p);
 		new BukkitRunnable() {

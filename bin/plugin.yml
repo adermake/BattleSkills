@@ -1,0 +1,8 @@
+name: AutoSkill
+main: core.main
+version: 1.0
+author: [adermake]
+api-version: 1.13
+commands:
+  skill:
+

@@ -27,7 +27,7 @@ public class Fly extends Skill {
 			
 			user.setFlying(xp);
 		}
-		setGliding(user, !user.isFlying());
+		
 		
 		
 	}

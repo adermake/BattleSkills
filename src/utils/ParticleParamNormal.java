@@ -28,7 +28,7 @@ public class ParticleParamNormal implements ParticleParam {
 		
 	}
 
-	
+	//
 	
 	
 	@SuppressWarnings("unchecked")
