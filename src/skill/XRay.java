@@ -134,6 +134,14 @@ public class XRay extends Skill {
 		
 	}
 
+
+
+	@Override
+	public void onEvent(Event e) {
+		// TODO Auto-generated method stub
+		
+	}
+
 	
 	
 }

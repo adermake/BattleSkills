@@ -142,7 +142,33 @@ public class ParUtils {
 		// x, double y, double z, int count, double offsetX, double offsetY, double
 		// offsetZ, double speed)
 	}
+	public static void createFlyingParticle(ParticleType par, Location loc, double spreadX, double spreadY, double spreadZ,
+			int count, double speed, Vector v,Player p) {
 
+		for (int i = 0; i < count; i++) {
+			WorldServer nmsWorld = ((CraftWorld) loc.getWorld()).getHandle();
+			
+				Location loctmp = loc.clone();
+				double randX = 0;
+				double randY = 0;
+				double randZ = 0;
+				if (spreadX != 0)
+					randX = ThreadLocalRandom.current().nextDouble(-spreadX, spreadX);
+				if (spreadY != 0)
+					randY = ThreadLocalRandom.current().nextDouble(-spreadY, spreadY);
+				if (spreadZ != 0)
+					randZ = ThreadLocalRandom.current().nextDouble(-spreadZ, spreadZ);
+				loctmp.add(randX, randY, randZ);
+				EntityPlayer ep = ((CraftPlayer) p).getHandle();
+				nmsWorld.a(ep, new ParticleParamNormal(par), true, loctmp.getX(), loctmp.getY(),
+						loctmp.getZ(), 0, v.getX(), v.getY(), v.getZ(), speed);
+			
+		}
+
+		// a(EntityPlayer target, ParticleParam particle, boolean longDistance, double
+		// x, double y, double z, int count, double offsetX, double offsetY, double
+		// offsetZ, double speed)
+	}
 	public static void parLineRedstone(Location l1C, Location l2C, Color color, float size, double thickness) {
 		if (thickness == 0) {
 			Bukkit.shutdown();

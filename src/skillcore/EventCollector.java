@@ -23,6 +23,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import core.main;
+import utils.ReconnectUtils;
 
 
 
@@ -196,7 +197,7 @@ public class EventCollector implements Listener {
 		
 		Player p = e.getPlayer();
 		Player rec = null;
-		Bukkit.broadcastMessage("P"+p.getName());
+		
 		for (Player pl : Skill.skills.keySet()) {
 			Bukkit.broadcastMessage("PL"+pl.getName());
 			if (pl.getName().equals(p.getName())) {
@@ -205,7 +206,7 @@ public class EventCollector implements Listener {
 			}
 		}
 		if (rec != null) {
-			Bukkit.broadcastMessage("A");
+			
 			ArrayList<SkillActionPair> skills = Skill.skills.get(rec);
 			Skill.skills.remove(rec);
 			Skill.skills.put(p,skills);
@@ -224,7 +225,7 @@ public class EventCollector implements Listener {
 		}
 		
 		if (rec != null) {
-			Bukkit.broadcastMessage("B");
+			
 			SkillMenu sm = SkillMenu.invs.get(rec);
 			SkillMenu.invs.remove(rec);
 			SkillMenu.invs.put(p, sm);
@@ -234,6 +235,7 @@ public class EventCollector implements Listener {
 			
 			
 		}
+		ReconnectUtils.reconnectPlayer(e.getPlayer());
 	}
 	
 

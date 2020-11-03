@@ -8,5 +8,9 @@ public class MathUtils {
 		int randomNum = ThreadLocalRandom.current().nextInt(min, max + 1);
 		return randomNum;
 	}
+	public static double randDouble(double min, double max) {
+		double randomNum = ThreadLocalRandom.current().nextDouble(min, max);
+		return randomNum;
+	}
 	//S
 }

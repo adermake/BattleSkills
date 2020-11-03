@@ -40,4 +40,10 @@ public class Telekinesis extends Skill {
 		
 	}
 
+	@Override
+	public void onEvent(Event e) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

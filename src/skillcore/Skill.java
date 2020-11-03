@@ -86,9 +86,13 @@ public abstract class Skill {
 	public abstract void onSkillLoop();
 	public abstract void onSkillStart();
 	public abstract void onSkillEnd();
-
+	public abstract void onEvent(Event e);
 	
-	
+	public static void sendEvent(Player p,Event e) {
+		for (SkillActionPair ska : skills.get(p)) {
+			ska.skill.onEvent(e);
+		}
+	}
 	public void toggleSkill(boolean toggle) {
 		active = toggle;
 		if (toggle) {
