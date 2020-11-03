@@ -12,6 +12,8 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+
+import skillcore.Skill;
 //s
 public class CommandReciever implements CommandExecutor, TabCompleter{
 	public static void dumpHeap(String filePath, boolean live) throws IOException {
@@ -39,12 +41,7 @@ public class CommandReciever implements CommandExecutor, TabCompleter{
 		
 		if(cmd.getName().equalsIgnoreCase("skill")) {
 			if(p.isOp()){
-				ItemStack is = new ItemStack(Material.EMERALD);
-				
-				ItemMeta im = is.getItemMeta();
-				im.addEnchant(Enchantment.VANISHING_CURSE, 1, true);
-				im.setDisplayName("§e"+args[0]);
-				is.setItemMeta(im);
+				ItemStack is = Skill.createSkillItem(args[0]);
 				p.getInventory().addItem(is);
 		        p.sendMessage("§8| §7Skill erstellt!");
 			}

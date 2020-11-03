@@ -18,19 +18,27 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
 import core.main;
+import utils.NBTUtils;
 
 
 public abstract class Skill {
 
 	public Player user;
 	public String name;
-	public boolean dead = false;
-	public static HashMap<Player,ArrayList<Skill>> skills = new HashMap<Player,ArrayList<Skill>>();
 	
+	
+	public boolean active = false;
+	public static HashMap<Player,ArrayList<SkillActionPair>> skills = new HashMap<Player,ArrayList<SkillActionPair>>();
+	public boolean dead = false;
+	public ItemStack item;
+	int ID = 0;
+	public static int maxID = 1;
 	public Skill() {
 		
 		
@@ -45,10 +53,16 @@ public abstract class Skill {
 		p.sendMessage("§eGained Skill: §7" +name);
 		onSkillStart();
 		user = p;
-		addSkill(p);
+	
 		new BukkitRunnable() {
 			public void run() {
+				
+				if (!user.isOnline())
+					return;
+				
+				if (active)
 				onSkillLoop();
+				
 				if (dead) {
 					skills.get(user).remove(this);
 					this.cancel();
@@ -59,30 +73,31 @@ public abstract class Skill {
 		}.runTaskTimer(main.plugin, 1, 1);
 	}
 	
-	
-	
-	public static void sendEvent(Player p,Event e) {
-		if (!skills.containsKey(p))
-			return;
-		for (Skill s : skills.get(p)) {
-			s.onEvent(e);
+	public static void setUserOfAllSkills(Player p) {
+		for (SkillActionPair ska : skills.get(p)) {
+			ska.skill.user = p;
 		}
 	}
 	
+
 	
-	public void addSkill(Player p) {
-		if (skills.containsKey(p)) {
-			skills.get(p).add(this);
-		}
-		else {
-			skills.put(p, new ArrayList<Skill>());
-			addSkill(p);
-		}
-	}
+	public abstract void onSkillToggleOff();
+	public abstract void onSkillToggleOn();
 	public abstract void onSkillLoop();
 	public abstract void onSkillStart();
 	public abstract void onSkillEnd();
-	public abstract void onEvent(Event e);
+
+	
+	
+	public void toggleSkill(boolean toggle) {
+		active = toggle;
+		if (toggle) {
+			 onSkillToggleOn();
+		}
+		else {
+			 onSkillToggleOff();
+		}
+	}
 	
 	
 	
@@ -93,9 +108,17 @@ public abstract class Skill {
 	
 	
 	
-	
-	
-	
+	public static ItemStack createSkillItem(String name) {
+		ItemStack is = new ItemStack(Material.NETHER_STAR);
+		
+		ItemMeta im = is.getItemMeta();
+		
+		im.setDisplayName("§e"+name);
+		is.setItemMeta(im);
+		is = NBTUtils.setNBT("SkillID", ""+maxID, is);
+		maxID++;
+       return is;
+	}
 	
 	
 	
@@ -116,10 +139,43 @@ public abstract class Skill {
 		dead = true;
 	}
 	
+	public static Skill createSkillFromItemName(Player p,String name) {
+
+		
 	
+		
+		name = name.substring(2, name.length());
+		name = name.replace(" ", "");
+		try {
+			name = "skill." + name;
+			// Bukkit.broadcastMessage("F" + s);
+			Class clazz = Class.forName(name);
+			Skill sp = (Skill) clazz.newInstance();
+			
+			
+			sp.activate(p);
+			
+			//p.getInventory().setItemInMainHand(new ItemStack(Material.PRISMARINE_CRYSTALS));
+			return sp;
+		} catch (Exception ex) {
+			ex.printStackTrace(System.out);
+		}
+		return null;
+	}
 
 	//MEHTHODS
-	
+	public static Skill findSkill(Player p,ItemStack is) {
+		for (SkillActionPair s : skills.get(p)) {
+			if (NBTUtils.getNBT("SkillID", is) != null) {
+				int i = Integer.parseInt(NBTUtils.getNBT("SkillID", is));
+				if (s.skill.ID == i) {
+					return s.skill;
+				}
+				
+			}
+		}
+		return null;
+	}
 	
 	public static int randInt(int min, int max) {
 		int randomNum = ThreadLocalRandom.current().nextInt(min, max + 1);

@@ -20,6 +20,7 @@ public class main extends JavaPlugin {
 		getServer().getPluginManager().registerEvents(new Move(), this);
 		getServer().getPluginManager().registerEvents(new EventCollector(), this);
 		getServer().getPluginManager().registerEvents(new InventoryListener(), this);
+
 		this.getCommand("skill").setExecutor(new CommandReciever());
 	}
 }

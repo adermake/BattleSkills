@@ -26,8 +26,16 @@ public class Telekinesis extends Skill {
 		
 	}
 
+
+
 	@Override
-	public void onEvent(Event e) {
+	public void onSkillToggleOff() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onSkillToggleOn() {
 		// TODO Auto-generated method stub
 		
 	}

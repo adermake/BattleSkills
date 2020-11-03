@@ -32,7 +32,7 @@ public class XRay extends Skill {
 	@Override
 	public void onSkillLoop() {
 		t++;
-		if (user.isSneaking()) {
+		
 		if (t > 5) {
 			t = 0;
 		user.removePotionEffect(PotionEffectType.NIGHT_VISION);
@@ -78,15 +78,8 @@ public class XRay extends Skill {
 		oldblocks = (ArrayList<Block>) blocks.clone();
 		blocks.clear();
 		}
-		}
-		else {
-			for (Block b : oldblocks) {
-				if (!blocks.contains(b))
-				user.sendBlockChange(b.getLocation(), b.getType(), ((byte) 0));
-			}
-			oldblocks = (ArrayList<Block>) blocks.clone();
-			blocks.clear();
-		}
+		
+		
 	}
 
 	
@@ -118,9 +111,26 @@ public class XRay extends Skill {
 		
 	}
 
+	
+
+
+
 	@Override
-	public void onEvent(Event e) {
-		
+	public void onSkillToggleOff() {
+		// TODO Auto-generated method stub
+		for (Block b : oldblocks) {
+			if (!blocks.contains(b))
+			user.sendBlockChange(b.getLocation(), b.getType(), ((byte) 0));
+		}
+		oldblocks = (ArrayList<Block>) blocks.clone();
+		blocks.clear();
+	}
+
+
+
+	@Override
+	public void onSkillToggleOn() {
+		// TODO Auto-generated method stub
 		
 	}
 

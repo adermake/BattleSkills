@@ -15,9 +15,14 @@ import org.bukkit.event.entity.EntityResurrectEvent;
 import org.bukkit.event.entity.EntityTargetEvent;
 import org.bukkit.event.entity.EntityToggleGlideEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerSwapHandItemsEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.scheduler.BukkitRunnable;
+
+import core.main;
 
 
 
@@ -33,28 +38,80 @@ public class EventCollector implements Listener {
 		if (!quickSwap.contains(e.getPlayer())) {
 			quickSwap.add(e.getPlayer());
 		}
+		Player p = e.getPlayer();
+		
+		if (!Skill.skills.containsKey(p))
+			return;
 		
 		
-		e.setCancelled(true);
+		for (SkillActionPair ska : Skill.skills.get(p)) {
+			
+			if (ska.skillAction == SkillAction.F && (p.getInventory().getItemInMainHand().getType() == ska.itemType || ska.itemType== Material.AIR)) {
+				e.setCancelled(true);
+				ska.skill.toggleSkill(!ska.skill.active);
+				
+			}
+			
+			
+		}
+		
+		
 	}
 	
 	
 	@EventHandler
 	public void onInteract(PlayerInteractEvent e) {
-		Skill.sendEvent(e.getPlayer(), e);
+		Player p = e.getPlayer();
+		if (!Skill.skills.containsKey(p))
+			return;
+		if (e.getHand() == EquipmentSlot.OFF_HAND)
+			return;
+		if (e.getAction()== Action.RIGHT_CLICK_AIR || e.getAction() == Action.RIGHT_CLICK_BLOCK) {
+			for (SkillActionPair ska : Skill.skills.get(p)) {
+				
+				if (ska.skillAction == SkillAction.RIGHTCLICK && (p.getInventory().getItemInMainHand().getType() == ska.itemType || ska.itemType== Material.AIR)) {
+					e.setCancelled(true);
+					ska.skill.toggleSkill(!ska.skill.active);
+				}
+				
+				
+			}
+		}
+		if (e.getAction()== Action.LEFT_CLICK_AIR || e.getAction() == Action.LEFT_CLICK_BLOCK) {
+			for (SkillActionPair ska : Skill.skills.get(p)) {
+				
+				if (ska.skillAction == SkillAction.LEFTCLICK && (p.getInventory().getItemInMainHand().getType() == ska.itemType || ska.itemType== Material.AIR) ) {
+					e.setCancelled(true);
+					ska.skill.toggleSkill(!ska.skill.active);
+				}
+				
+				
+			}
+		}
 	}
 	
 	
 	
 	
 	@EventHandler
-	public void plsDontLeave(PlayerToggleSneakEvent e) {
-		if (e.getPlayer().getVehicle() != null) {
-			Bukkit.broadcastMessage("STAY");
-			e.setCancelled(true);
+	public void onSneak(PlayerToggleSneakEvent e) {
+		Player p = e.getPlayer();
+		if (!Skill.skills.containsKey(p))
+			return;
+
+		for (SkillActionPair ska : Skill.skills.get(p)) {
+
+			if (ska.skillAction == SkillAction.SHIFT && (p.getInventory().getItemInMainHand().getType() == ska.itemType || ska.itemType== Material.AIR)) {
+				
+				
+				ska.skill.toggleSkill(!p.isSneaking());
+			}
+			
+			
 		}
 		
 	}
+	
 	
 	
 	@EventHandler
@@ -133,7 +190,51 @@ public class EventCollector implements Listener {
 	
 		}
 		
-
+	@EventHandler
+	public void onJoin(PlayerJoinEvent e) {
+		
+		
+		Player p = e.getPlayer();
+		Player rec = null;
+		Bukkit.broadcastMessage("P"+p.getName());
+		for (Player pl : Skill.skills.keySet()) {
+			Bukkit.broadcastMessage("PL"+pl.getName());
+			if (pl.getName().equals(p.getName())) {
+				rec = pl;
+				
+			}
+		}
+		if (rec != null) {
+			Bukkit.broadcastMessage("A");
+			ArrayList<SkillActionPair> skills = Skill.skills.get(rec);
+			Skill.skills.remove(rec);
+			Skill.skills.put(p,skills);
+			
+			
+			
+			Skill.setUserOfAllSkills(p);
+		}
+		 rec = null;
+		for (Player pl : SkillMenu.invs.keySet()) {
+			Bukkit.broadcastMessage("PL"+pl.getName());
+			if (pl.getName().equals(p.getName())) {
+				rec = pl;
+				
+			}
+		}
+		
+		if (rec != null) {
+			Bukkit.broadcastMessage("B");
+			SkillMenu sm = SkillMenu.invs.get(rec);
+			SkillMenu.invs.remove(rec);
+			SkillMenu.invs.put(p, sm);
+			sm.p = p;
+			
+			
+			
+			
+		}
+	}
 	
 
 }
