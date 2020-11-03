@@ -190,11 +190,12 @@ public class InventoryListener implements Listener {
 		if (inSkillMenu.containsKey(e.getPlayer())) {
 			if (p.getItemOnCursor().getType() != Material.NETHER_STAR)
 			p.setItemOnCursor(null);
+			SkillMenu.invs.get(p).updateSkills();
+			inSkillMenu.remove(e.getPlayer());
 		}
 		
 		//e.getPlayer().getInventory().setContents(inSkillMenu.get(e.getPlayer()));
-		SkillMenu.invs.get(p).updateSkills();;
-		inSkillMenu.remove(e.getPlayer());
+	
 		//Bukkit.broadcastMessage("Y");
 	}
 	

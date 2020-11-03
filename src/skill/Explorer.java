@@ -20,6 +20,8 @@ import utils.ParUtils;
 public class Explorer extends Skill {
 	ArrayList<String> structures = new ArrayList<String>();
 	Location closest;
+	
+	
 	@Override
 	public void onSkillToggleOff() {
 		// TODO Auto-generated method stub

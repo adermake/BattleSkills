@@ -10,6 +10,7 @@ import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.enchantment.PrepareItemEnchantEvent;
 import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityInteractEvent;
@@ -22,6 +23,8 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerSwapHandItemsEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.inventory.EquipmentSlot;
+import org.bukkit.inventory.InventoryView;
+import org.bukkit.inventory.InventoryView.Property;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -66,6 +69,12 @@ public class EventCollector implements Listener {
 	@EventHandler
 	public void onInteract(PlayerInteractEvent e) {
 		Player p = e.getPlayer();
+		if (e.getAction() == Action.RIGHT_CLICK_BLOCK) {
+			if (e.getClickedBlock().getType() == Material.SMITHING_TABLE) {
+				SkillMenu.open(p);
+				e.setCancelled(true);
+			}
+		}
 		if (!Skill.skills.containsKey(p))
 			return;
 		if (e.getHand() == EquipmentSlot.OFF_HAND)
@@ -137,8 +146,9 @@ public class EventCollector implements Listener {
 		e.setCancelled(true);
 	}
 	*/
+	/*
 	@EventHandler
-	public void onPressSpell(PlayerInteractEvent e) {
+	public void onPressSkill(PlayerInteractEvent e) {
 		Player p = e.getPlayer();
 
 		if (e.getAction() == Action.RIGHT_CLICK_BLOCK || e.getAction() == Action.RIGHT_CLICK_AIR || e.getAction() == Action.LEFT_CLICK_BLOCK || e.getAction() == Action.LEFT_CLICK_AIR) {
@@ -148,11 +158,9 @@ public class EventCollector implements Listener {
 				Actionbar bar = new Actionbar("§cDu bist verstummt!");
 				return;
 			}
-			*/
+			
 		ItemStack is = p.getInventory().getItemInMainHand();
-		if(is.getType() == Material.TOTEM_OF_UNDYING) {
-			SkillMenu.open(p);
-		}
+		
 		if (is != null) {
 			if (is.hasItemMeta()) {
 				if (is.getItemMeta().hasDisplayName()) {
@@ -193,6 +201,7 @@ public class EventCollector implements Listener {
 		
 	
 		}
+		*/
 		
 	@EventHandler
 	public void onJoin(PlayerJoinEvent e) {
@@ -242,10 +251,23 @@ public class EventCollector implements Listener {
 	}
 	
 	@EventHandler
-	public void onEntityHit(Player p, EntityDamageByEntityEvent e) {
-		Skill.sendEvent(p, e);
+	public void onEntityHit(EntityDamageByEntityEvent e) {
+		if (e.getDamager() instanceof Player) {
+			Skill.sendEvent((Player) e.getDamager(), e);
+		}
+		
 		
 	}
-	
+	@EventHandler
+	public void onPreEnchant(PrepareItemEnchantEvent e) {
+		InventoryView view = e.getView();
+		if (view.getTitle() == "Enchant") {
+			view.setProperty(Property.ENCHANT_BUTTON1, 0);
+	        view.setProperty(Property.ENCHANT_BUTTON2, 1);
+	        view.setProperty(Property.ENCHANT_BUTTON3, 66);
+		}
+        
+		
+	}
 
 }

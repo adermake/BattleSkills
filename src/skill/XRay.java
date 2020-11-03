@@ -22,10 +22,7 @@ public class XRay extends Skill {
 
 	ArrayList<Block> blocks = new ArrayList<Block>();
 	ArrayList<Block> oldblocks = new ArrayList<Block>();
-	public XRay() {
-		
-		name = "Xray";
-	}
+
 	int costPerTick = 1;
 	
 	int t = 0;

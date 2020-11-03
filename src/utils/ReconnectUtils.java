@@ -6,9 +6,9 @@ import java.util.HashMap;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
-import skill.SkillDropSystem;
 import skillcore.Skill;
 import skillcore.SkillActionPair;
+import skillcore.SkillDropSystem;
 
 public class ReconnectUtils {
 

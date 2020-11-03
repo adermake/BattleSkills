@@ -10,10 +10,7 @@ public class Fly extends Skill {
 
 	
 	
-	public Fly() {
-		
-		name = "Fly";
-	}
+
 	int costPerTick = 1;
 	@Override
 	public void onSkillLoop() {

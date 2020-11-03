@@ -41,7 +41,7 @@ public abstract class Skill {
 	public static int maxID = 1;
 	public Skill() {
 		
-		
+		name = this.getClass().getSimpleName();
 		
 	}
 	

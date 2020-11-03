@@ -5,9 +5,11 @@ package core;
 
 import org.bukkit.plugin.java.JavaPlugin;
 
-import skill.SkillDropSystem;
+import crafting.FireSorcery;
 import skillcore.EventCollector;
 import skillcore.InventoryListener;
+import skillcore.SkillDropSystem;
+import skillcore.SkillList;
 import skillcore.SkillMenu;
 
 
@@ -22,6 +24,8 @@ public class main extends JavaPlugin {
 		getServer().getPluginManager().registerEvents(new EventCollector(), this);
 		getServer().getPluginManager().registerEvents(new InventoryListener(), this);
 		getServer().getPluginManager().registerEvents(new SkillDropSystem(), this);
+		getServer().getPluginManager().registerEvents(new FireSorcery(), this);
+		SkillList.fillList();
 		this.getCommand("skill").setExecutor(new CommandReciever());
 	}
 }
