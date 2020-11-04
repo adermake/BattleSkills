@@ -11,6 +11,10 @@ import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.boss.BarColor;
+import org.bukkit.boss.BarFlag;
+import org.bukkit.boss.BarStyle;
+import org.bukkit.boss.BossBar;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Cow;
 import org.bukkit.entity.Entity;
@@ -89,10 +93,21 @@ public abstract class Skill {
 	public abstract void onEvent(Event e);
 	
 	public static void sendEvent(Player p,Event e) {
+		if (!skills.containsKey(p))
+		return;
 		for (SkillActionPair ska : skills.get(p)) {
 			ska.skill.onEvent(e);
 		}
 	}
+	
+	public static BossBar createBar(String name,BarColor color,BarStyle bs,BarFlag bf) {
+		BossBar b = Bukkit.createBossBar(name, color, bs, bf);
+	
+		
+		return b;
+	
+	}
+	
 	public void toggleSkill(boolean toggle) {
 		active = toggle;
 		if (toggle) {
@@ -309,7 +324,7 @@ public abstract class Skill {
 			e.setVelocity(toLocation.toVector().subtract(e.getLocation().toVector()).normalize().multiply(s*power));
 		}
 	}
-	public Player pointEntity(Player p) {
+	public Entity pointEntity(Player p) {
 		int range = 300;
 		int toleranz = 3;
 		Location loc = p.getLocation();
@@ -343,7 +358,22 @@ public abstract class Skill {
 					}
 				}
 			}
-			
+			for (Entity ent : p.getWorld().getEntities()) {
+					if (ent.getType() == EntityType.EXPERIENCE_ORB) {
+						continue;
+					}
+					if (ent == p)
+						continue;
+					Location ploc1 = ent.getLocation();
+					Location ploc2 = ent.getLocation();
+					ploc2.add(0, 1, 0);
+					if (ploc1.distance(loc) <= toleranz || ploc2.distance(loc) <= toleranz) {
+						
+
+						return ent;
+					}
+				
+			}
 			// SUBTRACTING LOCATION UM den prozess
 			// von vorne zu
 			// starten
@@ -678,7 +708,7 @@ public abstract class Skill {
 		Player nearest = null;
 		for (Player p : Bukkit.getOnlinePlayers()) {
 			
-			if (p != c && p.getGameMode() != GameMode.ADVENTURE) {
+			if (p != c && p.getGameMode() == GameMode.SURVIVAL) {
 				double dis = l.distance(p.getLocation());
 				if (dis<distance&& dis < range) {
 					nearest = p;

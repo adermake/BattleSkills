@@ -21,6 +21,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import core.main;
+import skill.Enchanter;
 
 public class InventoryListener implements Listener {
 
@@ -186,6 +187,10 @@ public class InventoryListener implements Listener {
 	
 	@EventHandler
 	public void onCloseInventory(InventoryCloseEvent e) {
+		if (Enchanter.enchanters.contains(e.getPlayer())) {
+			Enchanter.enchanters.remove(e.getPlayer());
+			
+		}
 		Player p = (Player) e.getPlayer();
 		if (inSkillMenu.containsKey(e.getPlayer())) {
 			if (p.getItemOnCursor().getType() != Material.NETHER_STAR)

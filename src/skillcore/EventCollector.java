@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Sound;
+import org.bukkit.enchantments.EnchantmentOffer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
@@ -29,6 +30,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import core.main;
+import net.minecraft.server.v1_15_R1.EnchantmentManager;
+import skill.Enchanter;
 import utils.ReconnectUtils;
 
 
@@ -127,12 +130,6 @@ public class EventCollector implements Listener {
 	
 	
 	
-	@EventHandler
-	public void onTarget(EntityTargetEvent e) {
-		
-		e.setCancelled(true);
-
-	}
 
 	@EventHandler
 	public void cancelGilding(EntityToggleGlideEvent e) {
@@ -258,14 +255,32 @@ public class EventCollector implements Listener {
 		
 		
 	}
+	
+	@EventHandler
+	public void onEntityTarget(EntityTargetEvent e) {
+		if (e.getTarget() instanceof Player) {
+			Skill.sendEvent((Player) e.getTarget(), e);
+		}
+		
+		
+	}
 	@EventHandler
 	public void onPreEnchant(PrepareItemEnchantEvent e) {
-		InventoryView view = e.getView();
-		if (view.getTitle() == "Enchant") {
-			view.setProperty(Property.ENCHANT_BUTTON1, 0);
-	        view.setProperty(Property.ENCHANT_BUTTON2, 1);
-	        view.setProperty(Property.ENCHANT_BUTTON3, 66);
-		}
+			if (Enchanter.enchanters.contains(e.getEnchanter())) {
+				Player p = e.getEnchanter();
+				int i = p.getLevel();
+				if (i <=0)
+					i = 1;
+			    for(EnchantmentOffer offer : e.getOffers()) {
+			    	if (offer != null) {
+			    		
+			    	
+			    	offer.setCost(i);
+			    	}
+			    }
+			}
+		
+		
         
 		
 	}

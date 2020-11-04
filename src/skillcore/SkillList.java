@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import skill.Explorer;
 import skill.Fly;
-import skill.Telekinesis;
+import skill.Psychic;
 import skill.XRay;
 import utils.MathUtils;
 
@@ -17,7 +17,7 @@ public class SkillList {
 	public static void fillList() {
 		skillList.add(new Explorer());
 		skillList.add(new Fly());
-		skillList.add(new Telekinesis());
+		skillList.add(new Psychic());
 		skillList.add(new XRay());
 	}
 	
