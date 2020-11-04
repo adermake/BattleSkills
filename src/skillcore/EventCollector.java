@@ -18,6 +18,7 @@ import org.bukkit.event.entity.EntityInteractEvent;
 import org.bukkit.event.entity.EntityResurrectEvent;
 import org.bukkit.event.entity.EntityTargetEvent;
 import org.bukkit.event.entity.EntityToggleGlideEvent;
+import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -72,6 +73,7 @@ public class EventCollector implements Listener {
 	@EventHandler
 	public void onInteract(PlayerInteractEvent e) {
 		Player p = e.getPlayer();
+		Skill.sendEvent(p, e);
 		if (e.getAction() == Action.RIGHT_CLICK_BLOCK) {
 			if (e.getClickedBlock().getType() == Material.SMITHING_TABLE) {
 				SkillMenu.open(p);
@@ -284,5 +286,14 @@ public class EventCollector implements Listener {
         
 		
 	}
+	
+	@EventHandler
+	public void onYeet(ProjectileLaunchEvent e) {
+		if (e.getEntity().getShooter() instanceof Player) {
+			Skill.sendEvent((Player) e.getEntity().getShooter(), e);
+		}
+	}
+	
+	
 
 }
