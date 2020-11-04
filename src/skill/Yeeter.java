@@ -19,7 +19,10 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import core.main;
+import net.minecraft.server.v1_15_R1.ParticleType;
+import net.minecraft.server.v1_15_R1.Particles;
 import skillcore.Skill;
+import utils.ParUtils;
 
 public class Yeeter extends Skill{
 
@@ -92,6 +95,7 @@ public class Yeeter extends Skill{
 					is.setAmount(is.getAmount()-1);
 					playSound(Sound.ENTITY_TNT_PRIMED, user.getLocation(), 1, 1);
 				}
+				
 			}
 			
 		}
@@ -130,6 +134,10 @@ public class Yeeter extends Skill{
 						}
 						if(fi.getType() == Material.ROTTEN_FLESH) {
 							e.addPotionEffect(new PotionEffect(PotionEffectType.HUNGER, 600, 0));
+						}
+						if(fi.getType() == Material.CAKE) {
+							ParUtils.createParticle(Particles.CLOUD, e.getEyeLocation(), 0.1, 0.1, 0.1, 10, 0);
+							e.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 60, 0));
 						}
 						i.remove();
 						this.cancel();
