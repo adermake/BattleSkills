@@ -7,7 +7,9 @@ import org.bukkit.event.Event;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
+import net.minecraft.server.v1_15_R1.Particles;
 import skillcore.Skill;
+import utils.ParUtils;
 
 public class Waterwalker extends Skill {
 	
@@ -45,6 +47,9 @@ public class Waterwalker extends Skill {
 			lastblock = user.getLocation().add(0, -1,0).getBlock();
 			user.removePotionEffect(PotionEffectType.SPEED);
 			user.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 20, 3));
+			ParUtils.createParticle(Particles.RAIN, user.getLocation(), 2, 0.3, 2, 35, 1);
+			//ParUtils.createParticle(Particles.CLOUD, user.getLocation().add(0,-1,0), 1, 0.3, 1, 35, 0.1F);
+	
 		}
 		if(user.getLocation().add(0,-1,0).getBlock().getBlockData() instanceof Waterlogged) {
 			if(((Waterlogged)user.getLocation().add(0,-1,0).getBlock().getBlockData()).isWaterlogged()) {
@@ -52,6 +57,11 @@ public class Waterwalker extends Skill {
 				lastblock = user.getLocation().add(0, -1,0).getBlock();
 				user.removePotionEffect(PotionEffectType.SPEED);
 				user.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 20, 3));
+				ParUtils.createParticle(Particles.RAIN, user.getLocation(), 2, 0.3, 2, 35, 1);
+				//ParUtils.createParticle(Particles.CLOUD, user.getLocation().add(0,-1,0), 1, 0.3, 1, 35, 0.1F);
+				
+				
+			
 			}
 		}
 		

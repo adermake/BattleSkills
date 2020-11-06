@@ -250,7 +250,7 @@ public abstract class Skill {
 
 	public void tagPlayer(Player ent) {
 		;
-		Bukkit.broadcastMessage("FIINISH TAG System");
+		//Bukkit.broadcastMessage("FIINISH TAG System");
 		
 	}
 	
@@ -324,6 +324,124 @@ public abstract class Skill {
 			e.setVelocity(toLocation.toVector().subtract(e.getLocation().toVector()).normalize().multiply(s*power));
 		}
 	}
+	public Entity pointPlayer(Player p,int range) {
+	
+		int toleranz = 3;
+		Location loc = p.getLocation();
+		for (double t = 1; t <= range; t=t+0.5) {
+
+			Vector direction = loc.getDirection().normalize();
+			double x = direction.getX() * t;
+			double y = direction.getY() * t + 1.5;
+			double z = direction.getZ() * t;
+			loc.add(x, y, z);
+			Location lo = loc.clone();
+
+			// Particel
+
+
+			if (loc.getBlock().getType().isSolid()) {
+				
+				
+				return null;
+			}
+
+			for (Player pl : Bukkit.getOnlinePlayers()) {
+				if (!(pl.getName().equalsIgnoreCase(p.getName())) && pl.getGameMode() != GameMode.ADVENTURE) {
+					
+					Location ploc1 = pl.getLocation();
+					Location ploc2 = pl.getLocation();
+					ploc2.add(0, 1, 0);
+					if (ploc1.distance(loc) <= toleranz || ploc2.distance(loc) <= toleranz) {
+						
+
+						return pl;
+					}
+				}
+			}
+			for (Player ent : Bukkit.getOnlinePlayers()) {
+					if (ent.getType() == EntityType.EXPERIENCE_ORB) {
+						continue;
+					}
+					if (ent == p)
+						continue;
+					Location ploc1 = ent.getLocation();
+					Location ploc2 = ent.getLocation();
+					ploc2.add(0, 1, 0);
+					if (ploc1.distance(loc) <= toleranz || ploc2.distance(loc) <= toleranz) {
+						
+
+						return ent;
+					}
+				
+			}
+			// SUBTRACTING LOCATION UM den prozess
+			// von vorne zu
+			// starten
+			loc.subtract(x, y, z);
+		}
+		return null;
+
+	}
+	public Entity pointExactPlayer(Player p,int range) {
+		
+		double toleranz = 1D;
+		Location loc = p.getLocation();
+		for (double t = 1; t <= range; t=t+0.5) {
+
+			Vector direction = loc.getDirection().normalize();
+			double x = direction.getX() * t;
+			double y = direction.getY() * t + 1.5;
+			double z = direction.getZ() * t;
+			loc.add(x, y, z);
+			Location lo = loc.clone();
+
+			// Particel
+
+
+			if (loc.getBlock().getType().isSolid()) {
+				
+				
+				return null;
+			}
+
+			for (Player pl : Bukkit.getOnlinePlayers()) {
+				if (!(pl.getName().equalsIgnoreCase(p.getName())) && pl.getGameMode() != GameMode.ADVENTURE) {
+					
+					Location ploc1 = pl.getLocation();
+					Location ploc2 = pl.getLocation();
+					ploc2.add(0, 1, 0);
+					if (ploc1.distance(loc) <= toleranz || ploc2.distance(loc) <= toleranz) {
+						
+
+						return pl;
+					}
+				}
+			}
+			for (Player ent : Bukkit.getOnlinePlayers()) {
+					if (ent.getType() == EntityType.EXPERIENCE_ORB) {
+						continue;
+					}
+					if (ent == p)
+						continue;
+					Location ploc1 = ent.getLocation();
+					Location ploc2 = ent.getLocation();
+					ploc2.add(0, 1, 0);
+					if (ploc1.distance(loc) <= toleranz || ploc2.distance(loc) <= toleranz) {
+						
+
+						return ent;
+					}
+				
+			}
+			// SUBTRACTING LOCATION UM den prozess
+			// von vorne zu
+			// starten
+			loc.subtract(x, y, z);
+		}
+		return null;
+
+	}
 	public Entity pointEntity(Player p) {
 		int range = 300;
 		int toleranz = 3;
@@ -383,8 +501,8 @@ public abstract class Skill {
 
 	}
 	
-	public Entity pointRealEntity(Player p) {
-		int range = 300;
+	public LivingEntity pointLivingEntity(Player p,int range) {
+	
 		int toleranz = 3;
 		Location loc = p.getLocation();
 		for (double t = 1; t <= range; t=t+0.5) {
@@ -404,7 +522,7 @@ public abstract class Skill {
 				break;
 			}
 
-			for (Entity ent : p.getWorld().getEntities()) {
+			for (LivingEntity ent : p.getWorld().getLivingEntities()) {
 				
 				if (ent instanceof Player) {
 					if (ent == p || ((Player) ent).getGameMode() == GameMode.ADVENTURE) {
@@ -511,7 +629,7 @@ public abstract class Skill {
 			loc.add(x, y, z);
 			Location lo = loc.clone();
 
-			if (loc.getBlock().getType() != Material.AIR) {
+			if (loc.getBlock().getType().isSolid()) {
 				return loc;
 
 			}

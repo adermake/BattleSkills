@@ -3,9 +3,12 @@ package core;
 
 
 
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import crafting.FireSorcery;
+import me.libraryaddict.disguise.DisguiseAPI;
 import skillcore.EventCollector;
 import skillcore.InventoryListener;
 import skillcore.SkillDropSystem;
@@ -27,5 +30,13 @@ public class main extends JavaPlugin {
 		getServer().getPluginManager().registerEvents(new FireSorcery(), this);
 		SkillList.fillList();
 		this.getCommand("skill").setExecutor(new CommandReciever());
+	}
+	
+	@Override
+	public void onDisable() {
+		for (Player p : Bukkit.getOnlinePlayers()) {
+			DisguiseAPI.undisguiseToAll(p);
+		}
+		
 	}
 }

@@ -70,7 +70,8 @@ public class XRay extends Skill {
 		
 		for (Block b : oldblocks) {
 			if (!blocks.contains(b))
-			user.sendBlockChange(b.getLocation(), b.getType(), ((byte) 0));
+				
+			user.sendBlockChange(b.getLocation(), b.getLocation().getBlock().getType(),b.getLocation().getBlock().getData());
 		}
 		oldblocks = (ArrayList<Block>) blocks.clone();
 		blocks.clear();
@@ -91,6 +92,9 @@ public class XRay extends Skill {
 				
 				
 			
+			}
+			else {
+				user.sendBlockChange(b.getLocation(), Material.AIR, ((byte) 0));
 			}
 			
 			

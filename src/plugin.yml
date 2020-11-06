@@ -3,6 +3,8 @@ main: core.main
 version: 1.0
 author: [adermake]
 api-version: 1.13
+depend: [LibsDisguises,GlowAPI]
 commands:
   skill:
+
 

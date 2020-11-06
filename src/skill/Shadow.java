@@ -2,6 +2,8 @@ package skill;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
+import org.bukkit.Sound;
+import org.bukkit.block.Block;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.BossBar;
@@ -42,6 +44,7 @@ public class Shadow extends Skill {
 				
 				if (!hidden) {
 					
+					playSound(Sound.AMBIENT_CAVE,user.getLocation(),1,1);
 					new Actionbar("Hidden").send(user);
 					for (Player p : Bukkit.getOnlinePlayers()) {
 						if(p != user) {

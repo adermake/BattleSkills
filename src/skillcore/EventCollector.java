@@ -254,7 +254,9 @@ public class EventCollector implements Listener {
 		if (e.getDamager() instanceof Player) {
 			Skill.sendEvent((Player) e.getDamager(), e);
 		}
-		
+		if (e.getEntity() instanceof Player) {
+			Skill.sendEvent((Player) e.getEntity(), e);
+		}
 		
 	}
 	
