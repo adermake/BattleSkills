@@ -4,7 +4,7 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="lib" path="C:/Users/Public/spigot-1.15.2 (1).jar"/>
 	<classpathentry kind="lib" path="C:/Users/Public/PacketListenerAPI_v3.7.3-SNAPSHOT.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Public/LibsDisguises.jar"/>
 	<classpathentry kind="lib" path="C:/Users/Public/GlowAPI_v1.4.13-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Public/LibsDisguises.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

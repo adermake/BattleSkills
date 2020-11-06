@@ -52,15 +52,18 @@ public class Transporter extends Skill {
 	
 	HashMap<Location,Pair<BlockData,NBTTagCompound>> storedBlockData = new HashMap<Location,Pair<BlockData,NBTTagCompound>>();
 	//HashMap<BlockData,Location> storedBlockPos = new HashMap<BlockData,Location>();
-	// ArrayList<ItemStack[]> invs = new ArrayList<ItemStack[]>();
-
-
 
 	@Override
 	public void onSkillToggleOff() { // blöcke hinsetzen
-		
-		for (Location l : storedBlockData.keySet()) {
-			placeBlock(l);
+		if(timer>60) {
+			for (Location l : storedBlockData.keySet()) {
+				Location loc = user.getLocation().add(l);
+				if(loc.getBlock().getType() != Material.BEDROCK) {
+					placeBlock(l);
+				}
+			}
+		} else {
+			active = true;
 		}
 		
 /*
@@ -306,11 +309,22 @@ public class Transporter extends Skill {
 	}
 
 	int timer = 0;
+	int size = 2;
 
 	@Override
 	public void onSkillToggleOn() { // blöcke aufsammeln
 		
-		storeBlock(new Location(user.getWorld(),0,0,1));
+		for(int x=-size; x<=size; x++) {
+			for(int y=0; y<=size+3; y++) {
+				for(int z=-size; z<=size; z++) {
+					Location l = new Location(user.getWorld(),x,y,z);
+					Location loc = (user.getLocation().add(l));
+					if(loc.getBlock().getType() != Material.LAVA && loc.getBlock().getType() != Material.BEDROCK) {
+						storeBlock(l);
+					}
+				}
+			}
+		}
 		/*
 		Location loc = user.getLocation().add(1, 0, 0);
 		Bukkit.broadcastMessage("Aufgesammmmmmelt");
@@ -374,7 +388,6 @@ public class Transporter extends Skill {
 
 	public void storeBlock(Location l) {
 		Location loc = l.clone().add(user.getLocation());
-		Bukkit.broadcastMessage("Aufgesammmmmmelt");
 		BlockData toStore = loc.getBlock().getBlockData().clone();
 		NBTTagCompound ntc = new NBTTagCompound();
 		if (!loc.getBlock().getState().getClass().getName().endsWith("CraftBlockState")) {
@@ -388,7 +401,6 @@ public class Transporter extends Skill {
 		}
 
 		if (loc.getBlock().getState() instanceof InventoryHolder) {
-			Bukkit.broadcastMessage("Hey");
 			((InventoryHolder) loc.getBlock().getState()).getInventory().clear();
 		}
 		if (loc.getBlock().getState() instanceof Campfire) {
@@ -411,10 +423,8 @@ public class Transporter extends Skill {
 	
 	
 	public void placeBlock(Location l) {
-		Bukkit.broadcastMessage("" + timer);
 		NBTTagCompound ntc = storedBlockData.get(l).getSecond();
 		BlockData bd = storedBlockData.get(l).getFirst();
-		Bukkit.broadcastMessage("Hingesetzt");
 		Location loc = l.clone();
 		loc = loc.add(user.getLocation());
 		loc.getBlock().setType(Material.AIR);
@@ -436,7 +446,6 @@ public class Transporter extends Skill {
 			tileEntity.update();
 
 			if (loc.getBlock().getState() instanceof Furnace) {
-				Bukkit.broadcastMessage("Im in");
 				Furnace f = (Furnace) b.getState();
 				Recipe recipe = null;
 				ItemStack item = f.getInventory().getItem(0);
@@ -476,11 +485,11 @@ public class Transporter extends Skill {
 						// result.setAmount(item.getAmount());
 						CookingRecipe fr = (CookingRecipe) recipe;
 						
-						Bukkit.broadcastMessage(fr.getKey().toString());
+						//Bukkit.broadcastMessage(fr.getKey().toString());
 						if (f.getInventory().getResult() == null
 								|| f.getInventory().getResult().getType() == result.getType()) {
 
-							Bukkit.broadcastMessage(NBTUtils.getNBT("BurnTime", f.getInventory().getFuel()).toString());
+							//Bukkit.broadcastMessage(NBTUtils.getNBT("BurnTime", f.getInventory().getFuel()).toString());
 							// TileEntityFurnace.f().get(f.getInventory().getFuel());
 							int fuel = 0;
 							for (Item i : TileEntityFurnace.f().keySet()) {
@@ -501,7 +510,7 @@ public class Transporter extends Skill {
 							if (f instanceof BlastFurnace || f instanceof Smoker) {
 								fuel /=2;
 							}
-							Bukkit.broadcastMessage("Fuel : " + fuel);
+							//Bukkit.broadcastMessage("Fuel : " + fuel);
 							int gf1;
 							int f1;
 							if (f.getInventory().getFuel() == null
@@ -556,9 +565,9 @@ public class Transporter extends Skill {
 								ItemStack fuelStack = f.getInventory().getFuel();
 								fuelStack.setAmount(((f1) - mininmus) / fuel);
 								
-								Bukkit.broadcastMessage("ITEMSTACK HAS AMOUT" +fuelStack.getAmount());
+								//Bukkit.broadcastMessage("ITEMSTACK HAS AMOUT" +fuelStack.getAmount());
 								f.getInventory().setItem(1, fuelStack);
-								Bukkit.broadcastMessage("FORMEL : " + (f1 - mininmus) / fuel);
+								//Bukkit.broadcastMessage("FORMEL : " + (f1 - mininmus) / fuel);
 							}
 							if (fuelClone.getType() == Material.LAVA_BUCKET) {
 								if (((f1) - mininmus) / fuel == 0)
@@ -574,14 +583,14 @@ public class Transporter extends Skill {
 							int restFuel;
 							if (f.getInventory().getFuel() != null
 									&& f.getInventory().getFuel().getType() != Material.BUCKET) {
-								Bukkit.broadcastMessage("IF");
+								//Bukkit.broadcastMessage("IF");
 								restFuel = f1 - timer - fuel * f.getInventory().getFuel().getAmount();
 							} else {
 								restFuel = f1 - timer;
-								Bukkit.broadcastMessage("ELSE");
+								//Bukkit.broadcastMessage("ELSE");
 							}
 
-							Bukkit.broadcastMessage("F1 " + f1 + " RF " + restFuel + " timer " + timer);
+							//Bukkit.broadcastMessage("F1 " + f1 + " RF " + restFuel + " timer " + timer);
 							
 							
 						
@@ -605,7 +614,7 @@ public class Transporter extends Skill {
 
 							tileEntity.load(ntc);
 							tileEntity.update();
-							Bukkit.broadcastMessage("jE BOL" +f.getCookTime());
+							//Bukkit.broadcastMessage("jE BOL" +f.getCookTime());
 						}
 					}
 				}
@@ -634,8 +643,6 @@ public class Transporter extends Skill {
 						//Bukkit.broadcastMessage("BT: "+bstand.getBrewingTime());
 					}
 				}.runTaskLater(main.plugin,3);
-				
-
 			}
 			
 			if (loc.getBlock().getState() instanceof Campfire) {
@@ -647,15 +654,10 @@ public class Transporter extends Skill {
 					ctimes[i] = bt;
 				}
 				ntc.setIntArray("CookingTimes", ctimes);
-				
-				
 
 				tileEntity.load(ntc);
 				tileEntity.update();
 			}
-			
-			Bukkit.broadcastMessage("Im out");
-
 		}
 	}
 }
