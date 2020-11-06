@@ -47,6 +47,9 @@ public class Shapeshifter extends Skill {
 	public void unMorph() {
 		user.setWalkSpeed(0.2F);
 		user.setFlySpeed(0.1F);
+		user.setFlying(false);
+		user.setAllowFlight(false);
+		
 		DisguiseAPI.undisguiseToAll(user);
 		mobCharacter = null;
 		Actionbar a = new Actionbar("You are no longer diguised");
