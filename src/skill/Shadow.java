@@ -1,5 +1,7 @@
 package skill;
 
+import java.util.ArrayList;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Sound;
@@ -20,17 +22,19 @@ import utils.ParUtils;
 
 public class Shadow extends Skill {
 
+	public static ArrayList<Player> hiding = new ArrayList<Player>();
+	
 	@Override
-	public void onSkillToggleOff() {
+	public boolean onSkillToggleOff() {
 		// TODO Auto-generated method stub
-		
+		return true;
+	}
+	@Override
+	public boolean onSkillToggleOn() {
+		// TODO Auto-generated method stub
+		return true;
 	}
 
-	@Override
-	public void onSkillToggleOn() {
-		// TODO Auto-generated method stub
-		
-	}
 	BossBar bar;
 	boolean hidden = false;
 	int hideCooldown = 20 * 3;
@@ -49,10 +53,11 @@ public class Shadow extends Skill {
 					for (Player p : Bukkit.getOnlinePlayers()) {
 						if(p != user) {
 							if (!p.hasPotionEffect(PotionEffectType.NIGHT_VISION)) {
-								p.hidePlayer(main.plugin, p);
+								p.hidePlayer(main.plugin, user);
 							}
 						}
 					}
+					hiding.add(user);
 					user.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 20*10000, 1));
 					ParUtils.createFlyingParticle(Particles.LARGE_SMOKE, user.getLocation(), 1, 2, 1, 11,1, user.getLocation().getDirection());
 					
@@ -68,6 +73,7 @@ public class Shadow extends Skill {
 							p.showPlayer(main.plugin,user);
 						}
 					}
+					hiding.remove(user);
 					user.removePotionEffect(PotionEffectType.INVISIBILITY);
 					ParUtils.createFlyingParticle(Particles.LARGE_SMOKE, user.getLocation(), 1, 2, 1, 11,1, user.getLocation().getDirection());
 					new Actionbar("Shown").send(user);

@@ -35,11 +35,11 @@ public class Shapeshifter extends Skill {
 	HashMap<EntityType,MobCharacter> mc = new HashMap<EntityType,MobCharacter>();
 	MobCharacter mobCharacter;
 	@Override
-	public void onSkillToggleOff() {
+	public boolean onSkillToggleOff() {
 		
 		
 		unMorph();
-		
+		return true;
 		
 	}
 
@@ -57,7 +57,7 @@ public class Shapeshifter extends Skill {
 		active = false;
 	}
 	@Override
-	public void onSkillToggleOn() {
+	public boolean onSkillToggleOn() {
 		// TODO Auto-generated method stub
 		
 		LivingEntity ent = pointLivingEntity(user,10);
@@ -73,13 +73,13 @@ public class Shapeshifter extends Skill {
 				players.add(p);
 			}
 			DisguiseAPI.disguiseToPlayers(user, mobDisguise,players);
-			
+			return true;
 		}
 		
 		
 		
-		
-		
+		toggleSkill(false);
+		return false;
 	}
 	int tick = 0;
 	int air = 20;

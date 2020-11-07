@@ -51,6 +51,11 @@ public class Psychic extends Skill {
 			
 			
 			doPin(grabbed, user.getLocation().add(user.getLocation().getDirection().multiply(dist)));
+			if (grabbed instanceof Player) {
+				if (grabbed.getVelocity().getY()<-1) {
+					grabbed.getVelocity().setY(-1);
+				}
+			}
 			if (!grabbed.getPassengers().contains(user)) 
 			dist += 0.3F;
 			
@@ -73,16 +78,17 @@ public class Psychic extends Skill {
 
 
 	@Override
-	public void onSkillToggleOff() {
+	public boolean onSkillToggleOff() {
 		// TODO Auto-generated method stub
-		
+		return true;
+	}
+	@Override
+	public boolean onSkillToggleOn() {
+		grabbed = null;
+		// TODO Auto-generated method stub
+		return true;
 	}
 
-	@Override
-	public void onSkillToggleOn() {
-		// TODO Auto-generated method stub
-		grabbed = null;
-	}
 
 	@Override
 	public void onEvent(Event e) {

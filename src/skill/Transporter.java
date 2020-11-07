@@ -54,16 +54,30 @@ public class Transporter extends Skill {
 	//HashMap<BlockData,Location> storedBlockPos = new HashMap<BlockData,Location>();
 
 	@Override
-	public void onSkillToggleOff() { // blöcke hinsetzen
+	public boolean onSkillToggleOff() { // blöcke hinsetzen
 		if(timer>60) {
+			int blocks = 0;
+			for (Location l : storedBlockData.keySet()) {
+				Location loc = user.getLocation().add(l);
+				if (loc.getBlock().getType().isSolid()) {
+					blocks++;
+				}
+			}
+			if (blocks > 20) {
+				active = true;
+				return false;
+			}
+			
 			for (Location l : storedBlockData.keySet()) {
 				Location loc = user.getLocation().add(l);
 				if(loc.getBlock().getType() != Material.BEDROCK) {
 					placeBlock(l);
 				}
 			}
+			return true;
 		} else {
 			active = true;
+			return false;
 		}
 		
 /*
@@ -312,7 +326,7 @@ public class Transporter extends Skill {
 	int size = 2;
 
 	@Override
-	public void onSkillToggleOn() { // blöcke aufsammeln
+	public boolean onSkillToggleOn() { // blöcke aufsammeln
 		
 		for(int x=-size; x<=size; x++) {
 			for(int y=0; y<=size+3; y++) {
@@ -325,6 +339,7 @@ public class Transporter extends Skill {
 				}
 			}
 		}
+		return true;
 		/*
 		Location loc = user.getLocation().add(1, 0, 0);
 		Bukkit.broadcastMessage("Aufgesammmmmmelt");
@@ -371,7 +386,9 @@ public class Transporter extends Skill {
 	@Override
 	public void onSkillStart() {
 		// TODO Auto-generated method stub
-
+		activateMessage = "House stored";
+		deactivateMessage = "House place";
+		failMessage = "Still on cooldown or too many blocks in zone";
 	}
 
 	@Override

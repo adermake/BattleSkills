@@ -36,12 +36,12 @@ public Acrobat() {
 	}
 
 	@Override
-	public void onSkillToggleOff() {
-		
+	public boolean onSkillToggleOff() {
+		return false;
 	}
 
 	@Override
-	public void onSkillToggleOn() {	
+	public boolean onSkillToggleOn() {	
 		Location loc = user.getEyeLocation();
 		Block b = null;
 		for(double i=0; i<1;i+=0.1) {
@@ -68,6 +68,8 @@ public Acrobat() {
 		}.runTaskTimer(main.plugin, 5, 1);
 		
 		toggleSkill(false);
+		
+		return true;
 	}
 
 	@Override

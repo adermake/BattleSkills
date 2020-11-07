@@ -28,17 +28,18 @@ import skillcore.Skill;
 public class Enchanter extends Skill {
 	public static ArrayList<Player> enchanters = new ArrayList<Player>();
 	@Override
-	public void onSkillToggleOff() {
+	public boolean onSkillToggleOff() {
 		// TODO Auto-generated method stub
 		Location l1 = user.getLocation();
 		l1.setY(0);
 		l1.setX(0);
 		l1.setZ(0);
 		l1.getBlock().setType(Material.BEDROCK);
+		return true;
 	}
 
 	@Override
-	public void onSkillToggleOn() {
+	public boolean onSkillToggleOn() {
 		// TODO Auto-generated method stub
 		/*
 		EntityHuman h =((CraftPlayer)user).getHandle();
@@ -55,6 +56,7 @@ public class Enchanter extends Skill {
 		user.openEnchanting(l1, true);
 		//user.openEnchanting(user.getLocation().add(2,0,0), true);
 		toggleSkill(false);
+		return true;
 	
 	}
 

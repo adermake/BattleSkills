@@ -9,13 +9,13 @@ import skillcore.Skill;
 public class Fletcher extends Skill {
 
 	@Override
-	public void onSkillToggleOff() {
+	public boolean onSkillToggleOff() {
 		// TODO Auto-generated method stub
-		
+		return true;
 	}
 
 	@Override
-	public void onSkillToggleOn() {
+	public boolean onSkillToggleOn() {
 		// TODO Auto-generated method stub
 		if (drainXp(3)) {
 			
@@ -23,6 +23,7 @@ public class Fletcher extends Skill {
 		}
 		
 		toggleSkill(false);
+		return true;
 	}
 
 	@Override

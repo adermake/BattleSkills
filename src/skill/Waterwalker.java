@@ -16,16 +16,17 @@ public class Waterwalker extends Skill {
 	Block lastblock;
 
 	@Override
-	public void onSkillToggleOff() {
+	public boolean onSkillToggleOff() {
 		if(lastblock != null) {
 			user.sendBlockChange(lastblock.getLocation(), lastblock.getBlockData());
 			lastblock = null;
 		}
-		
+		return true;
 	}
 
 	@Override
-	public void onSkillToggleOn() {
+	public boolean onSkillToggleOn() {
+		return true;
 		// TODO Auto-generated method stub
 		
 	}

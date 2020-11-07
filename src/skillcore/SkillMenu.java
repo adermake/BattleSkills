@@ -87,10 +87,12 @@ public class SkillMenu {
 		if (!Skill.skills.containsKey(p)) {
 			Skill.skills.put(p, new ArrayList<SkillActionPair>());
 		}
-		for (SkillActionPair s : Skill.skills.get(p)) {
-			s.skill.toggleSkill(false);
-		}
+
+		
+		
+		ArrayList<Skill> foundSkills = new ArrayList<Skill>();
 		ArrayList<SkillActionPair> nextPair = new ArrayList<SkillActionPair>();
+		//Bukkit.broadcastMessage("inv size" +inv.getSize());
 		for (int x = 8;x<inv.getSize();x++) {
 			ItemStack is = inv.getItem(x);
 			if (!is.hasItemMeta())
@@ -104,26 +106,66 @@ public class SkillMenu {
 					
 					skill = Skill.createSkillFromItemName(p, is.getItemMeta().getDisplayName());
 					skill.ID = Integer.parseInt(NBTUtils.getNBT("SkillID", is));
+					//Bukkit.broadcastMessage("SKILL DID NOT EXIST BEFORE");
 					
 				}
 				if (getSkillActionFromSlot(x) == SkillAction.PASSIVE) {
 					skill.toggleSkill(true);
 				}
-				
+				foundSkills.add(skill);
 				SkillActionPair sap = new SkillActionPair(getSkillActionFromSlot(x),getCasterItem(x), skill);
 				nextPair.add(sap);
 				
 			}
 		}
+		ArrayList<SkillActionPair> remove = new ArrayList<SkillActionPair>();
+		//ArrayList<SkillActionPair> adder = new ArrayList<SkillActionPair>();
+		for (SkillActionPair n : nextPair) {
+		for (SkillActionPair s : Skill.skills.get(p)) {
+			
+				Bukkit.broadcastMessage("R"+n.skill);
+				if (s.skill == n.skill) {
+					
+					remove.add(s);
+				
+			}
+			
+		}
+		}
+		
+		for (SkillActionPair s : remove) {
+			//Bukkit.broadcastMessage("REMOVING SKILL"+s.skill);
+			Skill.skills.get(p).remove(s);
+		}
+		
+		for (SkillActionPair s : nextPair) {
+			//Bukkit.broadcastMessage("ADDING SKILL"+s.skill);
+			Skill.skills.get(p).add(s);
+		}
+		
+		for (SkillActionPair s : Skill.skills.get(p)) {
+			if (!foundSkills.contains(s.skill)) {
+				//Bukkit.broadcastMessage("setting skill to unselected "+s.skill);
+				s.skill.unselected = true;
+				s.skill.toggleSkill(false);
+			}
+			else {
+				//Bukkit.broadcastMessage("setting skill to selected "+s.skill);
+				s.skill.unselected = false;
+			}
+		}
+		/*
 		for (SkillActionPair s : Skill.skills.get(p)) {
 			
 			if (!containsSkill(nextPair,s.skill)) {
 				
 				s.skill.killSkill();
+				
 			}
 		}
-		Skill.skills.put(p, nextPair);
 		
+		Skill.skills.put(p, nextPair);
+		*/
 	}
 	
 	public boolean containsSkill(ArrayList<SkillActionPair> nextPair,Skill s) {

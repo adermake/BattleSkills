@@ -15,8 +15,7 @@ public class Fly extends Skill {
 	@Override
 	public void onSkillLoop() {
 		
-		Bukkit.broadcastMessage(""+(user.getTotalExperience() > costPerTick));
-		Bukkit.broadcastMessage(""+user.getTotalExperience());
+		
 		user.setAllowFlight(user.getTotalExperience() > costPerTick);
 			
 		if (user.isFlying()) {
@@ -44,15 +43,14 @@ public class Fly extends Skill {
 	
 
 	@Override
-	public void onSkillToggleOff() {
+	public boolean onSkillToggleOff() {
 		// TODO Auto-generated method stub
-		
+		return true;
 	}
-
 	@Override
-	public void onSkillToggleOn() {
+	public boolean onSkillToggleOn() {
 		// TODO Auto-generated method stub
-		
+		return true;
 	}
 
 	@Override

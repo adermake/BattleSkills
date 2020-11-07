@@ -12,13 +12,13 @@ import utils.ParUtils;
 public class Teleporter extends Skill{
 
 	@Override
-	public void onSkillToggleOff() {
+	public boolean onSkillToggleOff() {
 		// TODO Auto-generated method stub
-		
+		return true;
 	}
 
 	@Override
-	public void onSkillToggleOn() {
+	public boolean onSkillToggleOn() {
 		// TODO Auto-generated method stub
 		if (drainXp(10) ) {
 			
@@ -40,9 +40,11 @@ public class Teleporter extends Skill{
 			ParUtils.createFlyingParticle(Particles.PORTAL, user.getLocation(), 1, 2, 1, 70,-8,user.getLocation().getDirection());
 			}
 		
+		return true;
 		
-		toggleSkill(false);
 		}
+		toggleSkill(false);
+		return false;
 	}
 		
 

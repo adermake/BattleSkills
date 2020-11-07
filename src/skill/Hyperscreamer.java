@@ -26,18 +26,18 @@ public class Hyperscreamer extends Skill {
 
 	ArrayList<Player> glowing = new ArrayList<Player>();
 	@Override
-	public void onSkillToggleOff() {
+	public boolean onSkillToggleOff() {
 		// TODO Auto-generated method stub
-		
+		return true;
 	}
 	boolean cast = false;
 	@Override
-	public void onSkillToggleOn() {
+	public boolean onSkillToggleOn() {
 		if (drainXp(5)) {
 			
 		
-		playSound(Sound.ENTITY_WITHER_SPAWN,user.getLocation(),2,0.5F);
-		playSound(Sound.BLOCK_BEACON_ACTIVATE,user.getLocation(),8,1);
+		playSound(Sound.ENTITY_WITHER_SPAWN,user.getLocation(),1,0.5F);
+		playSound(Sound.BLOCK_BEACON_ACTIVATE,user.getLocation(),1,1);
 		cast = true;
 		// TODO Auto-generated method stub
 		ParUtils.parKreisDot(Particles.CLOUD, user.getLocation(), 3, 1,6, user.getLocation().getDirection());
@@ -78,8 +78,11 @@ public class Hyperscreamer extends Skill {
 				if (t > 20 * 10) {
 					for (Player p : glowing) {
 						showPlayer(p,false);
-						
+						if (Shadow.hiding.contains(p)) {
+							user.hidePlayer(p);
+						}
 					}
+					
 					this.cancel();
 					glowing.clear();
 				}
@@ -89,14 +92,17 @@ public class Hyperscreamer extends Skill {
 			
 			}
 		}.runTaskTimer(main.plugin, 10,1);
+		return true;
 		}
 		toggleSkill(false);
+		return false;
 	}
 
 	
 	public void showPlayer(Player p,boolean show) {
 		if (show) {
 			GlowAPI.setGlowing(p, GlowAPI.Color.AQUA, user);
+			user.showPlayer(p);
 			glowing.add(p);
 		}
 		else {

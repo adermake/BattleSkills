@@ -74,21 +74,23 @@ public class EventCollector implements Listener {
 	public void onInteract(PlayerInteractEvent e) {
 		Player p = e.getPlayer();
 		Skill.sendEvent(p, e);
+		if (e.getHand() == EquipmentSlot.OFF_HAND)
+			return;
 		if (e.getAction() == Action.RIGHT_CLICK_BLOCK) {
 			if (e.getClickedBlock().getType() == Material.SMITHING_TABLE) {
 				SkillMenu.open(p);
 				e.setCancelled(true);
+				return;
 			}
 		}
 		if (!Skill.skills.containsKey(p))
 			return;
-		if (e.getHand() == EquipmentSlot.OFF_HAND)
-			return;
+	
 		if (e.getAction()== Action.RIGHT_CLICK_AIR || e.getAction() == Action.RIGHT_CLICK_BLOCK) {
 			for (SkillActionPair ska : Skill.skills.get(p)) {
 				
 				if (ska.skillAction == SkillAction.RIGHTCLICK && (p.getInventory().getItemInMainHand().getType() == ska.itemType || ska.itemType== Material.AIR)) {
-					e.setCancelled(true);
+					//e.setCancelled(true);
 					ska.skill.toggleSkill(!ska.skill.active);
 				}
 				
@@ -99,7 +101,7 @@ public class EventCollector implements Listener {
 			for (SkillActionPair ska : Skill.skills.get(p)) {
 				
 				if (ska.skillAction == SkillAction.LEFTCLICK && (p.getInventory().getItemInMainHand().getType() == ska.itemType || ska.itemType== Material.AIR) ) {
-					e.setCancelled(true);
+					//e.setCancelled(true);
 					ska.skill.toggleSkill(!ska.skill.active);
 				}
 				

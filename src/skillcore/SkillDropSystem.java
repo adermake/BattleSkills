@@ -1,10 +1,13 @@
 package skillcore;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.Sound;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -12,6 +15,7 @@ import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntitySpawnEvent;
@@ -23,8 +27,11 @@ import utils.ParUtils;
 import utils.SoundUtils;
 
 public class SkillDropSystem implements Listener {
+	
 	public static HashMap<Player,Double> breakCount = new HashMap<Player,Double>();
 	public static HashMap<Player,Double> succesCount = new HashMap<Player,Double>();
+	public static HashMap<Player,Double> scadder = new HashMap<Player,Double>();
+	public static ArrayList<Block> placedBlocks = new ArrayList<Block>();
 	
 	double mineDropChance = 1;
 	double mobDropChance = 3;
@@ -33,8 +40,15 @@ public class SkillDropSystem implements Listener {
 	@EventHandler
 	public void onBreak(BlockBreakEvent e) {
 		Player p = e.getPlayer();
-		
+		if (placedBlocks.contains(e.getBlock())) {
+			return;
+		}
 		if (e.getBlock().getType().toString().contains("_ORE")) {
+			
+			if (!scadder.containsKey(p)) {
+				scadder.put(p, 1D);
+			}
+			
 			
 			if (!breakCount.containsKey(p)) {
 				breakCount.put(p, (100D));
@@ -49,10 +63,11 @@ public class SkillDropSystem implements Listener {
 			double per = sc/bc;
 			
 			double currentDropChance =  100-100*Math.pow((100-mineDropChance)/100,Math.pow(( 1D/100D/per),exp));
-			Bukkit.broadcastMessage(""+currentDropChance);
+			//Bukkit.broadcastMessage(""+currentDropChance);
 			if (currentDropChance > MathUtils.randDouble(0, 100)) {
 				dropSkill(e.getBlock().getLocation().add(0.5,0.5,0.5));
-				succesCount.put(p, succesCount.get(p)+1);
+				succesCount.put(p, succesCount.get(p)+scadder.get(p));
+				scadder.put(p, scadder.get(p)+1);
 			}
 			breakCount.put(p, breakCount.get(p)+mineDropChance);
 		}
@@ -60,11 +75,18 @@ public class SkillDropSystem implements Listener {
 		
 	}
 	
+	@EventHandler
+	public void onPlaceBlock(BlockPlaceEvent e) {
+		placedBlocks.add(e.getBlock());
+	}
+	
+	
 	
 	@EventHandler
 	public void onKill(EntityDamageByEntityEvent e) {
 		
 		Player p;
+		
 		if (!(e.getDamager() instanceof Player)) {
 			
 			if (e.getDamager() instanceof Projectile) {
@@ -95,6 +117,9 @@ public class SkillDropSystem implements Listener {
 			
 			if (d <=0 ) {
 				
+				if (!scadder.containsKey(p)) {
+					scadder.put(p, 1D);
+				}
 				
 				
 				if (!breakCount.containsKey(p)) {
@@ -110,11 +135,12 @@ public class SkillDropSystem implements Listener {
 				double per = sc/bc;
 				
 				double currentDropChance =  100-100*Math.pow((100-mobDropChance)/100,Math.pow((1D/100D/per),exp));
-				Bukkit.broadcastMessage(""+currentDropChance);
+				//Bukkit.broadcastMessage(""+currentDropChance);
 				if (currentDropChance > MathUtils.randDouble(0, 100)) {
 					
 					dropSkill(ent.getLocation());
-					succesCount.put(p, succesCount.get(p)+1);
+					succesCount.put(p, succesCount.get(p)+scadder.get(p));
+					scadder.put(p, scadder.get(p)+1);
 				}
 				breakCount.put(p, breakCount.get(p)+mobDropChance);
 				

@@ -30,16 +30,16 @@ public class Yeeter extends Skill{
 	
 	
 	@Override
-	public void onSkillToggleOff() {
+	public boolean onSkillToggleOff() {
 		// TODO Auto-generated method stub
-		
+		return true;
+	}
+	@Override
+	public boolean onSkillToggleOn() {
+		// TODO Auto-generated method stub
+		return true;
 	}
 
-	@Override
-	public void onSkillToggleOn() {
-		// TODO Auto-generated method stub
-		
-	}
 
 	@Override
 	public void onSkillLoop() {

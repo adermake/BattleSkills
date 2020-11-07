@@ -18,7 +18,7 @@ public class ReconnectUtils {
 		
 		reconnectRefrence(SkillDropSystem.breakCount, p);
 		reconnectRefrence(SkillDropSystem.succesCount, p);
-		
+		reconnectRefrence(SkillDropSystem.scadder, p);
 	}
 	
 	

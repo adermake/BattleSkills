@@ -28,6 +28,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
 import core.main;
+import utils.Actionbar;
 import utils.NBTUtils;
 
 
@@ -36,13 +37,16 @@ public abstract class Skill {
 	public Player user;
 	public String name;
 	
-	
+	public boolean unselected = true;
 	public boolean active = false;
 	public static HashMap<Player,ArrayList<SkillActionPair>> skills = new HashMap<Player,ArrayList<SkillActionPair>>();
 	public boolean dead = false;
 	public ItemStack item;
 	int ID = 0;
 	public static int maxID = 1;
+	public String activateMessage = "";
+	public String deactivateMessage = "";
+	public String failMessage = "";
 	public Skill() {
 		
 		name = this.getClass().getSimpleName();
@@ -64,7 +68,7 @@ public abstract class Skill {
 				if (!user.isOnline())
 					return;
 				
-				if (active)
+				if (active && !unselected)
 				onSkillLoop();
 				
 				if (dead) {
@@ -85,8 +89,8 @@ public abstract class Skill {
 	
 
 	
-	public abstract void onSkillToggleOff();
-	public abstract void onSkillToggleOn();
+	public abstract boolean onSkillToggleOff();
+	public abstract boolean onSkillToggleOn();
 	public abstract void onSkillLoop();
 	public abstract void onSkillStart();
 	public abstract void onSkillEnd();
@@ -109,17 +113,47 @@ public abstract class Skill {
 	}
 	
 	public void toggleSkill(boolean toggle) {
+		if (unselected) {
+			return;
+		}
+			
 		active = toggle;
 		if (toggle) {
-			 onSkillToggleOn();
+			 if (onSkillToggleOn()) { 
+				 if (!activateMessage.equals("")) {
+					 Actionbar a = new Actionbar("§e"+activateMessage);
+					 a.send(user);
+				 }
+				
+			 }
+			 else {
+				 if (!failMessage.equals("")) {
+					 Actionbar a = new Actionbar("§c"+failMessage);
+					 a.send(user);
+				 }
+			 }
+	
 		}
 		else {
-			 onSkillToggleOff();
+			if (onSkillToggleOff()) {
+				if (!deactivateMessage.equals("")) {
+					 Actionbar a = new Actionbar("§e"+deactivateMessage);
+					 a.send(user);
+				}
+				
+			}
+			else {
+				 if (!failMessage.equals("")) {
+					 Actionbar a = new Actionbar("§c"+failMessage);
+					 a.send(user);
+				 }
+			 }
+			
 		}
 	}
 	
 	
-	
+
 	
 	
 	

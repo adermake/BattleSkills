@@ -21,13 +21,13 @@ public class Illusionist extends Skill{
 
 	HashMap<Location,BlockIllusion> illusions = new HashMap<Location,BlockIllusion>();
 	@Override
-	public void onSkillToggleOff() {
+	public boolean onSkillToggleOff() {
 		// TODO Auto-generated method stub
-		
+		return true;
 	}
 
 	@Override
-	public void onSkillToggleOn() {
+	public boolean onSkillToggleOn() {
 		// TODO Auto-generated method stub
 		if (drainXp(5)) {
 			Location b = block(user,10);
@@ -38,9 +38,11 @@ public class Illusionist extends Skill{
 			}
 			ParUtils.createParticle(Particles.WITCH, b.getBlock().getLocation().add(0.5,0,0.5), 1, 1, 1, 15, 0);
 			playSound(Sound.BLOCK_ENCHANTMENT_TABLE_USE,b.getBlock().getLocation(),1,1);
+			return true;
 		}
 		
 		toggleSkill(false);
+		return false;
 	}
 
 	@Override

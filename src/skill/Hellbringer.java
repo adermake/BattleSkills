@@ -15,15 +15,15 @@ import utils.ParUtils;
 public class Hellbringer extends Skill {
 
 	@Override
-	public void onSkillToggleOff() {
+	public boolean onSkillToggleOff() {
 		// TODO Auto-generated method stub
-		
+		return true;
 	}
 
 	@Override
-	public void onSkillToggleOn() {
+	public boolean onSkillToggleOn() {
 		// TODO Auto-generated method stub
-		if (drainXp(10)) {
+		if (drainXp(15)) {
 			
 		
 		playSound(Sound.ENTITY_FIREWORK_ROCKET_LAUNCH,user.getLocation(),3,2);
@@ -56,6 +56,7 @@ public class Hellbringer extends Skill {
 		}
 		}
 		toggleSkill(false);
+		return true;
 	}
 
 	@Override

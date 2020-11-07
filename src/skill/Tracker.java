@@ -14,16 +14,16 @@ import utils.ParUtils;
 public class Tracker extends Skill {
 
 	@Override
-	public void onSkillToggleOff() {
+	public boolean onSkillToggleOff() {
 		// TODO Auto-generated method stub
-		
+		return true;
+	}
+	@Override
+	public boolean onSkillToggleOn() {
+		// TODO Auto-generated method stub
+		return true;
 	}
 
-	@Override
-	public void onSkillToggleOn() {
-		// TODO Auto-generated method stub
-		
-	}
 	
 	int t = 0;
 	@Override

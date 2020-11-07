@@ -23,19 +23,15 @@ public class Explorer extends Skill {
 	
 	
 	@Override
-	public void onSkillToggleOff() {
+	public boolean onSkillToggleOff() {
 		// TODO Auto-generated method stub
-		
+		return true;
 	}
 
 	@Override
-	public void onSkillToggleOn() {
+	public boolean onSkillToggleOn() {
 		// TODO Auto-generated method stub
-		
-
-		//ParUtils.createFlyingParticle(Particles.TOTEM_OF_UNDYING, user.getEyeLocation(), 0, 0, 0, 1, 2, dir);
-		
-		
+		return true;
 	}
 	int searchCooldown = 0;
 	@Override

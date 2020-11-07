@@ -30,7 +30,7 @@ public class XRay extends Skill {
 	public void onSkillLoop() {
 		t++;
 		
-		if (t > 5) {
+		if (t > 5 && drainXp(3)) {
 			t = 0;
 		user.removePotionEffect(PotionEffectType.NIGHT_VISION);
 		user.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION,20,0,true));
@@ -117,7 +117,7 @@ public class XRay extends Skill {
 
 
 	@Override
-	public void onSkillToggleOff() {
+	public boolean onSkillToggleOff() {
 		// TODO Auto-generated method stub
 		for (Block b : oldblocks) {
 			if (!blocks.contains(b))
@@ -125,14 +125,15 @@ public class XRay extends Skill {
 		}
 		oldblocks = (ArrayList<Block>) blocks.clone();
 		blocks.clear();
+		return true;
 	}
 
 
 
 	@Override
-	public void onSkillToggleOn() {
+	public boolean onSkillToggleOn() {
 		// TODO Auto-generated method stub
-		
+		return true;
 	}
 
 
